@@ -589,19 +589,21 @@ class KubeSpawner(Spawner):
         temp_name = getattr(self, 'name', '')
         print('temp_name:' + temp_name)
         if temp_name:
-            servername = '-' + temp_name
+            server_name = '-' + temp_name
         else:
-            servername = ''
+            server_name = ''
 
         legacy_escaped_username = ''.join([s if s in safe_chars else '-' for s in self.user.name.lower()])
         safe_username = escapism.escape(self.user.name, safe=safe_chars, escape_char='-').lower()
-        print('servername:' + servername)
-        return template.format(
-            userid=self.user.id,
-            username=safe_username,
-            legacy_escape_username=legacy_escaped_username,
-            servername=servername
-            )
+        d = {'username': safe_username, 'servername': server_name}
+        return self.pod_name_template.format(**d)
+        # print('servername:' + servername)
+        # return self.template.format(
+        #     userid=self.user.id,
+        #     username=safe_username,
+        #     legacy_escape_username=legacy_escaped_username,
+        #     servername=server_name
+        #     )
 
     def _expand_all(self, src):
         if isinstance(src, list):
@@ -752,8 +754,8 @@ class KubeSpawner(Spawner):
         be the case. This allows us to continue serving from the old pods with
         the old names.
         """
-        if 'pod_name' in state:
-            self.pod_name = state['pod_name']
+        # if 'pod_name' in state:
+        #     self.pod_name = state['pod_name']
 
     @gen.coroutine
     def poll(self):
