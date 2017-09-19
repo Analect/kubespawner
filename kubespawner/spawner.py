@@ -587,6 +587,7 @@ class KubeSpawner(Spawner):
         safe_chars = set(string.ascii_lowercase + string.digits)
         # Set servername based on whether named-server initialised
         temp_name = getattr(self, 'name', '')
+        print('temp_name:' + temp_name)
         if temp_name:
             servername = '-' + temp_name
         else:
@@ -594,6 +595,7 @@ class KubeSpawner(Spawner):
 
         legacy_escaped_username = ''.join([s if s in safe_chars else '-' for s in self.user.name.lower()])
         safe_username = escapism.escape(self.user.name, safe=safe_chars, escape_char='-').lower()
+        print('servername:' + servername)
         return template.format(
             userid=self.user.id,
             username=safe_username,
