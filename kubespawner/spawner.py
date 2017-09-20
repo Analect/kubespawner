@@ -754,8 +754,8 @@ class KubeSpawner(Spawner):
         be the case. This allows us to continue serving from the old pods with
         the old names.
         """
-        # if 'pod_name' in state:
-        #     self.pod_name = state['pod_name']
+        if 'pod_name' in state:
+            self.pod_name = state['pod_name']
 
     @gen.coroutine
     def poll(self):
