@@ -615,18 +615,6 @@ class KubeSpawner(Spawner):
         else:
             return src
 
-    # def determine_servername(self):
-    #     """
-    #     Determine if server being spawned is of type 'default' or 'named-server'.
-    #     From an API perspective, calling POST '/users/:user/server' results in a default server.
-    #     Calling POST '/users/:user/servers/:server_name' results in a named-server
-    #     In the case of the latter, the servername should get integrated into pod and pvc names to ensure uniqueness.
-    #     """
-    #     if getattr(self, 'name', None) is None:
-    #         return getattr(self, 'user.name')
-    #     else:
-    #         return getattr(self, 'name')
-
     @gen.coroutine
     def get_pod_manifest(self):
         """
@@ -662,12 +650,18 @@ class KubeSpawner(Spawner):
 
         # Default set of labels, picked up from
         # https://github.com/kubernetes/helm/blob/master/docs/chart_best_practices/labels.md
+
         labels = {
             'heritage': 'jupyterhub',
             'component': 'singleuser-server',
             'app': 'jupyterhub',
             'hub.jupyter.org/username': escapism.escape(self.user.name)
         }
+
+        # Check first is a named-server servername has been set
+        temp_servername = getattr(self, 'name', None)
+        if temp_servername:
+            labels['hub.jupyter.org/servername']=temp_servername
 
         labels.update(self._expand_all(self.singleuser_extra_labels))
 
@@ -706,6 +700,11 @@ class KubeSpawner(Spawner):
             'app': 'jupyterhub',
             'hub.jupyter.org/username': escapism.escape(self.user.name)
         }
+
+        # Check first is a named-server servername has been set
+        temp_servername = getattr(self, 'name', None)
+        if temp_servername:
+            labels['hub.jupyter.org/servername']=temp_servername
 
         labels.update(self._expand_all(self.user_storage_extra_labels))
         return make_pvc(
