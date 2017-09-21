@@ -598,7 +598,7 @@ class KubeSpawner(Spawner):
         #d = {'username': safe_username, 'servername': server_name}
         #return self.pod_name_template.format(**d)
         print('servername:' + server_name)
-        return self.template.format(
+        return template.format(
             userid=self.user.id,
             username=safe_username,
             legacy_escape_username=legacy_escaped_username,
