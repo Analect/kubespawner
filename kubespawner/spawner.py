@@ -587,7 +587,6 @@ class KubeSpawner(Spawner):
         safe_chars = set(string.ascii_lowercase + string.digits)
         # Set servername based on whether named-server initialised
         temp_name = getattr(self, 'name', '')
-        print('temp_name:' + temp_name)
         if temp_name:
             server_name = '-' + temp_name
         else:
@@ -658,7 +657,7 @@ class KubeSpawner(Spawner):
             'hub.jupyter.org/username': escapism.escape(self.user.name)
         }
 
-        # Check first is a named-server servername has been set
+        # Check if named-server servername has been set and if so, extend pod label.
         temp_servername = getattr(self, 'name', None)
         if temp_servername:
             labels['hub.jupyter.org/servername']=temp_servername
@@ -701,7 +700,7 @@ class KubeSpawner(Spawner):
             'hub.jupyter.org/username': escapism.escape(self.user.name)
         }
 
-        # Check first is a named-server servername has been set
+        # Check if a named-server servername has been set and if so, extend pvc labels.
         temp_servername = getattr(self, 'name', None)
         if temp_servername:
             labels['hub.jupyter.org/servername']=temp_servername
@@ -867,15 +866,15 @@ class KubeSpawner(Spawner):
                 break
         return args
 
-    def get_env(self):
-        # HACK: This is deprecated, and should be removed soon.
-        # We set these to be compatible with DockerSpawner and earlie KubeSpawner
-        env = super(KubeSpawner, self).get_env()
-        env.update({
-            'JPY_USER': self.user.name,
-            'JPY_COOKIE_NAME': self.server.cookie_name,
-            'JPY_BASE_URL': self.server.base_url,
-            'JPY_HUB_PREFIX': self.hub.server.base_url,
-            'JPY_HUB_API_URL': self.accessible_hub_api_url
-        })
-        return env
+    # def get_env(self):
+    #     # HACK: This is deprecated, and should be removed soon.
+    #     # We set these to be compatible with DockerSpawner and earlie KubeSpawner
+    #     env = super(KubeSpawner, self).get_env()
+    #     env.update({
+    #         'JPY_USER': self.user.name,
+    #         'JPY_COOKIE_NAME': self.server.cookie_name,
+    #         'JPY_BASE_URL': self.server.base_url,
+    #         'JPY_HUB_PREFIX': self.hub.server.base_url,
+    #         'JPY_HUB_API_URL': self.accessible_hub_api_url
+    #     })
+    #     return env
