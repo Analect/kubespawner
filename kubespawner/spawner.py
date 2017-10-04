@@ -675,7 +675,7 @@ class KubeSpawner(Spawner):
             run_as_uid=singleuser_uid,
             fs_gid=singleuser_fs_gid,
             run_privileged=self.singleuser_privileged,
-            env=self.get_env(),
+#            env=self.get_env(),
             volumes=self._expand_all(self.volumes) + [hack_volume],
             volume_mounts=self._expand_all(self.volume_mounts) + [hack_volume_mount],
             working_dir=self.singleuser_working_dir,
