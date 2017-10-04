@@ -29,7 +29,7 @@ def make_pod(
     run_as_uid,
     fs_gid,
     run_privileged,
-#    env,
+    env,
     working_dir,
     volumes,
     volume_mounts,
@@ -144,7 +144,7 @@ def make_pod(
     port_.name = "notebook-port"
     port_.container_port = port
     notebook_container.ports.append(port_)
-#    notebook_container.env = [V1EnvVar(k, v) for k, v in env.items()]
+    notebook_container.env = [V1EnvVar(k, v) for k, v in env.items()]
     notebook_container.args = cmd
     notebook_container.image_pull_policy = image_pull_policy
     notebook_container.lifecycle = lifecycle_hooks
